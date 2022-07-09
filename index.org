@@ -1,0 +1,146 @@
+#+TITLE: Data Compression Techniques
+#+SUBTITLE: An overview of some data compression techniques
+#+AUTHOR: Ashiwn Godbole
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
+
+* Data Compression Techniques
+
+** Statistical Techniques
+
+*** Run Length Coding
+- good technique when compressing data that has frequent sequences of repeating characters
+- emit a pair (character, length)
+- in case there are no repeating characters, results in a "compressed" file that is actually expanded in size because for each 8bit character, we use 8bits + 8bits (say) for the pair
+- /*parameters* : repititions in source string (generally no user-settable parameter)/
+
+*** Shannon Fano Coding
+- uses probabilities of the characters in the string to assign codes to each character
+- the codes are built in a top-down fashion
+  - start at the root and keep dividing "nodes"
+- the process involves the following:
+  1. calculate the probabilities of every character and create a table
+  2. sort the table in order of probabilities
+  3. divide the table into two such that the resulting tables have approximately the same total probability
+  4. assign one table "0" and the other "1"
+  5. until all the tables have only one element each, repeating from 'step 3'
+- the limitation of this technique is that it does not always produce the optimal sequence
+- codeword lengths are within 1 bit of the optimal codes
+- have the limitation imposed by integral number of bits per character to encode
+- works best in cases where the probabilities of different characters are in powers of two
+- decoder requires
+  - probability table (to reconstruct the codes in the exact same manner as the encoder)
+  - direct mapping between codes and characters in some other form
+- /*parameters* : probabilities of occurance of characters (generally no user-settable parameter)/
+
+*** Huffman Coding
+- similar in principle to shannon-fano coding
+- follows a bottoms-up approach
+  - start with leaf nodes and build till convergence is achieved
+- the process involves the following
+  1. create a list of nodes (one per node) with the probabilities of occurance for that character
+  2. pick the two nodes with least probability and make a new node with its probability set to the sum of probabilities of the two nodes
+  3. delete the two nodes
+  4. goto 'step 2' if there are two or more nodes left
+- the constraint of having integral bits per character applies here as well
+  - when the probabilities are powers or two, huffman codes give the optimal coding
+  - in other cases, the integral bits per character constraint causes characters with probability less than a power of two to have a "fractional bit overhead" and for those with higher probability than a power of two, there is a fractional bit deficit
+  - depending on how the probabilities are, the overhead and the deficit result in an overall overhead (unless ofcourse the probabilities are all powers of two)
+- this technique also requires the information about probabilities to be handed over to the decode in some form
+- one way to attempt at sidestepping the integral number of bits per symbol is to try code for a group of two or more symbols
+  - /if the events of the characters in the group are *independent*/ then the probability of the group as a whole is just the product of the individual elements' probabilities
+  - problems arise as we try to increase the size of the groups
+  - if our message is coded over an alphabet of /m/ letters
+    - for a group of 2 elements, we would have $m^2$ entries in the table
+    - for a group of 3 elements, we would have $m^3$ entries in the table
+    - for a group of /n/ elements, we would have $m^n$ entries in the table
+  - it is not practical to evaluate and distribute such large tables as they will end up causing more overhead than the bits saved during compression (also in terms of computation required, this will be very taxing)
+- one way to avoid the overhead due to this extra information is to use an adaptive version of the algorithm
+  - in the adaptive case, a huffman tree is built on the fly as per the arriving symbol in both the encoder and the decoder
+  - each node is attached a "weight" which is the probability and a "number"
+  - the "number"s are assigned bottom-to-top and left-to-right
+  - it needs to be ensured that if we order the nodes according to weights $$w_1 < w_2 < ... < w_{(2m-1)}$$ then $$n_1 < n_2 < ... < n_{(2m-1)}$$ which besically means that a node with heigher weight must have a higher number
+    - /the 2m - 1 comes from the fact that each node in a huffman tree must have a sibling, except for the root/
+    - this also means that a parent node must have a higher "number" assigned to it than its children
+    - note: /set of nodes that have the same weight/ is called a /block/
+  - the UPDATE process is required when a new symbol arrives (at the encoder and decoder):
+  - the process of encoding and decoding starts off with a "Not Yet Transmitted" or "NYT" node
+  - everytime a new symbol arrives
+    - if it is seen for the first time, split the NYT node into two, assign one of the childen the current symbol, and make the other one the new NYT
+    - if it has been seen before, visit the symbols node
+      - if it has the highest node number in its block, then increment its node number
+      - otherwise swap the node with the node with the highest node number in its block and then increment it
+    - go to the parent of the currently selected node and repeat till the root node is reached
+  - the advantage of building the tree on the fly is that we can avoid the overhead required for packaging the probabilities with the compressed data
+    - The algorithm is not free of the integral bits per character constrint though, so we still are not able to exactly reach entropy in most cases
+- /*parameters*/ :
+  - /probabilities of occurance of characters/
+  - /number of characters to clump together for encoding (use-settable)/
+
+*** Arithmetic Coding
+
+** Burrows Wheeler Transform
+- completely different principle when compared to the other techniques described above
+- breaks up input into multiple blocks of some fixed size
+- uses the /block-sort transform/ to sort the block in a particular manner
+- uses the /move-to-front transform/ to convert the sorted contents into a form that is good for other statistical encoders 
+- an important observation is that statistical encoders work primarily on the occurance probabilities of characters
+  - the probability of occurance does not take into account the "order" or the "context" of occurance of the characters
+  - BWT takes the order/context of occurance into account when encoding
+- the block-sorting process: (there are some optimizations that can be done, those are not shown for simplicity)
+  1. compute all the possible "left cyclic" permulations of the source string
+  2. sort the permulations in lexicographical order
+  3. extract the last column of the matrix formed by the sorted permulations
+  4. extract the position of the original string in the sorted matrix
+  5. the last column and the position are the output
+- example: source text = BANANA
+| permulations | Index | sorted | last column |
+|--------------+-------+--------+-------------|
+| BANANA       |     1 | ABANAN | N           |
+| ANANAB       |     2 | ANABAN | N           |
+| NANABA       |     3 | ANANAB | B           |
+| ANABAN       |     4 | BANANA | A           |
+| NABANA       |     5 | NABANA | A           |
+| ABANAN       |     6 | NANABA | A           |
+|--------------+-------+--------+-------------|
+- output = NNBAAA, 4
+- to decode the string, we need only 2 adjecent columns from the sorted table are required
+- taking the last column gives us the first column for free (just sorting the last column gives the first column)
+- also, since we are rotating towards the left, the first char goes to the end and the second becomes the first... making the last column have the character just left of the first column's character
+- so just from the last column we can generate the whole matrix, and then the index that was exported gives the index to the row containing the decoded string
+- example : encoded text = NNBAAA, 4
+| n | o | s | j  | s  | j   | s   | j    | s    | j     | s     | j      | s      |
+| 1 | N | A | NA | AB | NAB | ABA | NABA | ABAN | NABAN | ABANA | NABANA | ABANAN |
+| 2 | N | A | NA | AN | NAN | ANA | NANA | ANAB | NANAB | ANABA | NANABA | ANABAN |
+| 3 | B | A | BA | AN | BAN | ANA | BANA | ANAN | BANAN | ANANA | BANANA | ANANAB |
+| 4 | A | B | AB | BA | ABA | BAN | ABAN | BANA | ABANA | BANAN | ABANAN | *BANANA* |
+| 5 | A | N | AN | NA | ANA | NAB | ANAB | NABA | ANABA | NABAN | ANABAN | NABANA |
+| 6 | A | N | AN | NA | ANA | NAN | ANAN | NANA | ANANA | NANAB | ANANAB | NANABA |
+- /o = output, s = sorted, j = output+previous sorted/
+- as can be seen the output is re-formed in the same row pointed to by the index
+
+- the move-to-front process is quite simple as well
+  1. prepare the characterset
+  2. start from the first character, get its index from the characterset
+  3. move the character to the begginging of the characterset
+  4. repeat 'step 2' till all the characters are encoded
+- the procedure to decode this is also very simple
+  1. prepare the characterset
+  2. take the character at the index recieved in the encoded string
+  3. move the character to the begining of the characterset
+  4. repeat 'step 2' till all the characters are encoded
+
+- /*parameters*/ :
+  - /size of the block of text that we wish to operate on (user-settable)/
+
+** Dictionary Techniques
+
+*** LZ77
+
+*** LZSS
+
+*** LZ78
+
+*** LZW
+
+*** snappy

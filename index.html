@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-09 Sat 16:52 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Data Compression Techniques</title>
+<meta name="author" content="Ashiwn Godbole" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/bigblow.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/hideshow.css"/>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery-ui-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.localscroll-min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.zclip.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/bigblow.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/hideshow.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Data Compression Techniques
+<br />
+<span class="subtitle">An overview of some data compression techniques</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org9ea3630">1. Data Compression Techniques</a>
+<ul>
+<li><a href="#org16960a0">1.1. Statistical Techniques</a>
+<ul>
+<li><a href="#org29dad72">1.1.1. Run Length Coding</a></li>
+<li><a href="#org48874e5">1.1.2. Shannon Fano Coding</a></li>
+<li><a href="#org841b10f">1.1.3. Huffman Coding</a></li>
+<li><a href="#org2abf993">1.1.4. Arithmetic Coding</a></li>
+</ul>
+</li>
+<li><a href="#orgc6eb65b">1.2. Burrows Wheeler Transform</a></li>
+<li><a href="#org36b665d">1.3. Dictionary Techniques</a>
+<ul>
+<li><a href="#org62ac201">1.3.1. LZ77</a></li>
+<li><a href="#org9a9b25a">1.3.2. LZSS</a></li>
+<li><a href="#org29896ff">1.3.3. LZ78</a></li>
+<li><a href="#orgcbd60b4">1.3.4. LZW</a></li>
+<li><a href="#org32e396f">1.3.5. snappy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9ea3630" class="outline-2">
+<h2 id="org9ea3630"><span class="section-number-2">1.</span> Data Compression Techniques</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org16960a0" class="outline-3">
+<h3 id="org16960a0"><span class="section-number-3">1.1.</span> Statistical Techniques</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org29dad72" class="outline-4">
+<h4 id="org29dad72"><span class="section-number-4">1.1.1.</span> Run Length Coding</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<ul class="org-ul">
+<li>good technique when compressing data that has frequent sequences of repeating characters</li>
+<li>emit a pair (character, length)</li>
+<li>in case there are no repeating characters, results in a "compressed" file that is actually expanded in size because for each 8bit character, we use 8bits + 8bits (say) for the pair</li>
+<li><i><b>parameters</b> : repititions in source string (generally no user-settable parameter)</i></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org48874e5" class="outline-4">
+<h4 id="org48874e5"><span class="section-number-4">1.1.2.</span> Shannon Fano Coding</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<ul class="org-ul">
+<li>uses probabilities of the characters in the string to assign codes to each character</li>
+<li>the codes are built in a top-down fashion
+<ul class="org-ul">
+<li>start at the root and keep dividing "nodes"</li>
+</ul></li>
+<li>the process involves the following:
+<ol class="org-ol">
+<li>calculate the probabilities of every character and create a table</li>
+<li>sort the table in order of probabilities</li>
+<li>divide the table into two such that the resulting tables have approximately the same total probability</li>
+<li>assign one table "0" and the other "1"</li>
+<li>until all the tables have only one element each, repeating from 'step 3'</li>
+</ol></li>
+<li>the limitation of this technique is that it does not always produce the optimal sequence</li>
+<li>codeword lengths are within 1 bit of the optimal codes</li>
+<li>have the limitation imposed by integral number of bits per character to encode</li>
+<li>works best in cases where the probabilities of different characters are in powers of two</li>
+<li>decoder requires
+<ul class="org-ul">
+<li>probability table (to reconstruct the codes in the exact same manner as the encoder)</li>
+<li>direct mapping between codes and characters in some other form</li>
+</ul></li>
+<li><i><b>parameters</b> : probabilities of occurance of characters (generally no user-settable parameter)</i></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org841b10f" class="outline-4">
+<h4 id="org841b10f"><span class="section-number-4">1.1.3.</span> Huffman Coding</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<ul class="org-ul">
+<li>similar in principle to shannon-fano coding</li>
+<li>follows a bottoms-up approach
+<ul class="org-ul">
+<li>start with leaf nodes and build till convergence is achieved</li>
+</ul></li>
+<li>the process involves the following
+<ol class="org-ol">
+<li>create a list of nodes (one per node) with the probabilities of occurance for that character</li>
+<li>pick the two nodes with least probability and make a new node with its probability set to the sum of probabilities of the two nodes</li>
+<li>delete the two nodes</li>
+<li>goto 'step 2' if there are two or more nodes left</li>
+</ol></li>
+<li>the constraint of having integral bits per character applies here as well
+<ul class="org-ul">
+<li>when the probabilities are powers or two, huffman codes give the optimal coding</li>
+<li>in other cases, the integral bits per character constraint causes characters with probability less than a power of two to have a "fractional bit overhead" and for those with higher probability than a power of two, there is a fractional bit deficit</li>
+<li>depending on how the probabilities are, the overhead and the deficit result in an overall overhead (unless ofcourse the probabilities are all powers of two)</li>
+</ul></li>
+<li>this technique also requires the information about probabilities to be handed over to the decode in some form</li>
+<li>one way to attempt at sidestepping the integral number of bits per symbol is to try code for a group of two or more symbols
+<ul class="org-ul">
+<li><i>if the events of the characters in the group are <b>independent</b></i> then the probability of the group as a whole is just the product of the individual elements' probabilities</li>
+<li>problems arise as we try to increase the size of the groups</li>
+<li>if our message is coded over an alphabet of <i>m</i> letters
+<ul class="org-ul">
+<li>for a group of 2 elements, we would have \(m^2\) entries in the table</li>
+<li>for a group of 3 elements, we would have \(m^3\) entries in the table</li>
+<li>for a group of <i>n</i> elements, we would have \(m^n\) entries in the table</li>
+</ul></li>
+<li>it is not practical to evaluate and distribute such large tables as they will end up causing more overhead than the bits saved during compression (also in terms of computation required, this will be very taxing)</li>
+</ul></li>
+<li>one way to avoid the overhead due to this extra information is to use an adaptive version of the algorithm
+<ul class="org-ul">
+<li>in the adaptive case, a huffman tree is built on the fly as per the arriving symbol in both the encoder and the decoder</li>
+<li>each node is attached a "weight" which is the probability and a "number"</li>
+<li>the "number"s are assigned bottom-to-top and left-to-right</li>
+<li>it needs to be ensured that if we order the nodes according to weights \[w_1 < w_2 < ... < w_{(2m-1)}\] then \[n_1 < n_2 < ... < n_{(2m-1)}\] which besically means that a node with heigher weight must have a higher number
+<ul class="org-ul">
+<li><i>the 2m - 1 comes from the fact that each node in a huffman tree must have a sibling, except for the root</i></li>
+<li>this also means that a parent node must have a higher "number" assigned to it than its children</li>
+<li>note: <i>set of nodes that have the same weight</i> is called a <i>block</i></li>
+</ul></li>
+<li>the UPDATE process is required when a new symbol arrives (at the encoder and decoder):</li>
+<li>the process of encoding and decoding starts off with a "Not Yet Transmitted" or "NYT" node</li>
+<li>everytime a new symbol arrives
+<ul class="org-ul">
+<li>if it is seen for the first time, split the NYT node into two, assign one of the childen the current symbol, and make the other one the new NYT</li>
+<li>if it has been seen before, visit the symbols node
+<ul class="org-ul">
+<li>if it has the highest node number in its block, then increment its node number</li>
+<li>otherwise swap the node with the node with the highest node number in its block and then increment it</li>
+</ul></li>
+<li>go to the parent of the currently selected node and repeat till the root node is reached</li>
+</ul></li>
+<li>the advantage of building the tree on the fly is that we can avoid the overhead required for packaging the probabilities with the compressed data
+<ul class="org-ul">
+<li>The algorithm is not free of the integral bits per character constrint though, so we still are not able to exactly reach entropy in most cases</li>
+</ul></li>
+</ul></li>
+<li><i><b>parameters</b></i> :
+<ul class="org-ul">
+<li><i>probabilities of occurance of characters</i></li>
+<li><i>number of characters to clump together for encoding (use-settable)</i></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2abf993" class="outline-4">
+<h4 id="org2abf993"><span class="section-number-4">1.1.4.</span> Arithmetic Coding</h4>
+</div>
+</div>
+
+<div id="outline-container-orgc6eb65b" class="outline-3">
+<h3 id="orgc6eb65b"><span class="section-number-3">1.2.</span> Burrows Wheeler Transform</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>completely different principle when compared to the other techniques described above</li>
+<li>breaks up input into multiple blocks of some fixed size</li>
+<li>uses the <i>block-sort transform</i> to sort the block in a particular manner</li>
+<li>uses the <i>move-to-front transform</i> to convert the sorted contents into a form that is good for other statistical encoders</li>
+<li>an important observation is that statistical encoders work primarily on the occurance probabilities of characters
+<ul class="org-ul">
+<li>the probability of occurance does not take into account the "order" or the "context" of occurance of the characters</li>
+<li>BWT takes the order/context of occurance into account when encoding</li>
+</ul></li>
+<li>the block-sorting process: (there are some optimizations that can be done, those are not shown for simplicity)
+<ol class="org-ol">
+<li>compute all the possible "left cyclic" permulations of the source string</li>
+<li>sort the permulations in lexicographical order</li>
+<li>extract the last column of the matrix formed by the sorted permulations</li>
+<li>extract the position of the original string in the sorted matrix</li>
+<li>the last column and the position are the output</li>
+</ol></li>
+<li>example: source text = BANANA</li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">permulations</th>
+<th scope="col" class="org-right">Index</th>
+<th scope="col" class="org-left">sorted</th>
+<th scope="col" class="org-left">last column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">BANANA</td>
+<td class="org-right">1</td>
+<td class="org-left">ABANAN</td>
+<td class="org-left">N</td>
+</tr>
+
+<tr>
+<td class="org-left">ANANAB</td>
+<td class="org-right">2</td>
+<td class="org-left">ANABAN</td>
+<td class="org-left">N</td>
+</tr>
+
+<tr>
+<td class="org-left">NANABA</td>
+<td class="org-right">3</td>
+<td class="org-left">ANANAB</td>
+<td class="org-left">B</td>
+</tr>
+
+<tr>
+<td class="org-left">ANABAN</td>
+<td class="org-right">4</td>
+<td class="org-left">BANANA</td>
+<td class="org-left">A</td>
+</tr>
+
+<tr>
+<td class="org-left">NABANA</td>
+<td class="org-right">5</td>
+<td class="org-left">NABANA</td>
+<td class="org-left">A</td>
+</tr>
+
+<tr>
+<td class="org-left">ABANAN</td>
+<td class="org-right">6</td>
+<td class="org-left">NANABA</td>
+<td class="org-left">A</td>
+</tr>
+</tbody>
+</table>
+<ul class="org-ul">
+<li>output = NNBAAA, 4</li>
+<li>to decode the string, we need only 2 adjecent columns from the sorted table are required</li>
+<li>taking the last column gives us the first column for free (just sorting the last column gives the first column)</li>
+<li>also, since we are rotating towards the left, the first char goes to the end and the second becomes the first&#x2026; making the last column have the character just left of the first column's character</li>
+<li>so just from the last column we can generate the whole matrix, and then the index that was exported gives the index to the row containing the decoded string</li>
+<li>example : encoded text = NNBAAA, 4</li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">n</td>
+<td class="org-left">o</td>
+<td class="org-left">s</td>
+<td class="org-left">j</td>
+<td class="org-left">s</td>
+<td class="org-left">j</td>
+<td class="org-left">s</td>
+<td class="org-left">j</td>
+<td class="org-left">s</td>
+<td class="org-left">j</td>
+<td class="org-left">s</td>
+<td class="org-left">j</td>
+<td class="org-left">s</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">N</td>
+<td class="org-left">A</td>
+<td class="org-left">NA</td>
+<td class="org-left">AB</td>
+<td class="org-left">NAB</td>
+<td class="org-left">ABA</td>
+<td class="org-left">NABA</td>
+<td class="org-left">ABAN</td>
+<td class="org-left">NABAN</td>
+<td class="org-left">ABANA</td>
+<td class="org-left">NABANA</td>
+<td class="org-left">ABANAN</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">N</td>
+<td class="org-left">A</td>
+<td class="org-left">NA</td>
+<td class="org-left">AN</td>
+<td class="org-left">NAN</td>
+<td class="org-left">ANA</td>
+<td class="org-left">NANA</td>
+<td class="org-left">ANAB</td>
+<td class="org-left">NANAB</td>
+<td class="org-left">ANABA</td>
+<td class="org-left">NANABA</td>
+<td class="org-left">ANABAN</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">B</td>
+<td class="org-left">A</td>
+<td class="org-left">BA</td>
+<td class="org-left">AN</td>
+<td class="org-left">BAN</td>
+<td class="org-left">ANA</td>
+<td class="org-left">BANA</td>
+<td class="org-left">ANAN</td>
+<td class="org-left">BANAN</td>
+<td class="org-left">ANANA</td>
+<td class="org-left">BANANA</td>
+<td class="org-left">ANANAB</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">A</td>
+<td class="org-left">B</td>
+<td class="org-left">AB</td>
+<td class="org-left">BA</td>
+<td class="org-left">ABA</td>
+<td class="org-left">BAN</td>
+<td class="org-left">ABAN</td>
+<td class="org-left">BANA</td>
+<td class="org-left">ABANA</td>
+<td class="org-left">BANAN</td>
+<td class="org-left">ABANAN</td>
+<td class="org-left"><b>BANANA</b></td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-left">A</td>
+<td class="org-left">N</td>
+<td class="org-left">AN</td>
+<td class="org-left">NA</td>
+<td class="org-left">ANA</td>
+<td class="org-left">NAB</td>
+<td class="org-left">ANAB</td>
+<td class="org-left">NABA</td>
+<td class="org-left">ANABA</td>
+<td class="org-left">NABAN</td>
+<td class="org-left">ANABAN</td>
+<td class="org-left">NABANA</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-left">A</td>
+<td class="org-left">N</td>
+<td class="org-left">AN</td>
+<td class="org-left">NA</td>
+<td class="org-left">ANA</td>
+<td class="org-left">NAN</td>
+<td class="org-left">ANAN</td>
+<td class="org-left">NANA</td>
+<td class="org-left">ANANA</td>
+<td class="org-left">NANAB</td>
+<td class="org-left">ANANAB</td>
+<td class="org-left">NANABA</td>
+</tr>
+</tbody>
+</table>
+<ul class="org-ul">
+<li><i>o = output, s = sorted, j = output+previous sorted</i></li>
+<li>as can be seen the output is re-formed in the same row pointed to by the index</li>
+
+<li>the move-to-front process is quite simple as well
+<ol class="org-ol">
+<li>prepare the characterset</li>
+<li>start from the first character, get its index from the characterset</li>
+<li>move the character to the begginging of the characterset</li>
+<li>repeat 'step 2' till all the characters are encoded</li>
+</ol></li>
+<li>the procedure to decode this is also very simple
+<ol class="org-ol">
+<li>prepare the characterset</li>
+<li>take the character at the index recieved in the encoded string</li>
+<li>move the character to the begining of the characterset</li>
+<li>repeat 'step 2' till all the characters are encoded</li>
+</ol></li>
+
+<li><i><b>parameters</b></i> :
+<ul class="org-ul">
+<li><i>size of the block of text that we wish to operate on (user-settable)</i></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org36b665d" class="outline-3">
+<h3 id="org36b665d"><span class="section-number-3">1.3.</span> Dictionary Techniques</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-org62ac201" class="outline-4">
+<h4 id="org62ac201"><span class="section-number-4">1.3.1.</span> LZ77</h4>
+</div>
+
+<div id="outline-container-org9a9b25a" class="outline-4">
+<h4 id="org9a9b25a"><span class="section-number-4">1.3.2.</span> LZSS</h4>
+</div>
+
+<div id="outline-container-org29896ff" class="outline-4">
+<h4 id="org29896ff"><span class="section-number-4">1.3.3.</span> LZ78</h4>
+</div>
+
+<div id="outline-container-orgcbd60b4" class="outline-4">
+<h4 id="orgcbd60b4"><span class="section-number-4">1.3.4.</span> LZW</h4>
+</div>
+
+<div id="outline-container-org32e396f" class="outline-4">
+<h4 id="org32e396f"><span class="section-number-4">1.3.5.</span> snappy</h4>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Ashiwn Godbole</p>
+<p class="date">Created: 2022-07-09 Sat 16:52</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
