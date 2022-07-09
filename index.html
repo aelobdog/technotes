@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-09 Sat 16:52 -->
+<!-- 2022-07-09 Sat 18:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Data Compression Techniques</title>
@@ -52,24 +52,24 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org9ea3630">1. Data Compression Techniques</a>
+<li><a href="#org7ca6806">1. Data Compression Techniques</a>
 <ul>
-<li><a href="#org16960a0">1.1. Statistical Techniques</a>
+<li><a href="#org5987176">1.1. Statistical Techniques</a>
 <ul>
-<li><a href="#org29dad72">1.1.1. Run Length Coding</a></li>
-<li><a href="#org48874e5">1.1.2. Shannon Fano Coding</a></li>
-<li><a href="#org841b10f">1.1.3. Huffman Coding</a></li>
-<li><a href="#org2abf993">1.1.4. Arithmetic Coding</a></li>
+<li><a href="#org8ddba97">1.1.1. Run Length Coding</a></li>
+<li><a href="#org7cb0432">1.1.2. Shannon Fano Coding</a></li>
+<li><a href="#org466c61f">1.1.3. Huffman Coding</a></li>
+<li><a href="#orgbb72869">1.1.4. Arithmetic Coding</a></li>
 </ul>
 </li>
-<li><a href="#orgc6eb65b">1.2. Burrows Wheeler Transform</a></li>
-<li><a href="#org36b665d">1.3. Dictionary Techniques</a>
+<li><a href="#org4f3297f">1.2. Burrows Wheeler Transform</a></li>
+<li><a href="#org83f53f2">1.3. Dictionary Techniques</a>
 <ul>
-<li><a href="#org62ac201">1.3.1. LZ77</a></li>
-<li><a href="#org9a9b25a">1.3.2. LZSS</a></li>
-<li><a href="#org29896ff">1.3.3. LZ78</a></li>
-<li><a href="#orgcbd60b4">1.3.4. LZW</a></li>
-<li><a href="#org32e396f">1.3.5. snappy</a></li>
+<li><a href="#org04e1012">1.3.1. LZ77</a></li>
+<li><a href="#org6046e8a">1.3.2. LZSS</a></li>
+<li><a href="#orgad2e7e0">1.3.3. LZ78</a></li>
+<li><a href="#org73657c2">1.3.4. LZW</a></li>
+<li><a href="#org44b1866">1.3.5. snappy</a></li>
 </ul>
 </li>
 </ul>
@@ -78,16 +78,16 @@
 </div>
 </div>
 
-<div id="outline-container-org9ea3630" class="outline-2">
-<h2 id="org9ea3630"><span class="section-number-2">1.</span> Data Compression Techniques</h2>
+<div id="outline-container-org7ca6806" class="outline-2">
+<h2 id="org7ca6806"><span class="section-number-2">1.</span> Data Compression Techniques</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org16960a0" class="outline-3">
-<h3 id="org16960a0"><span class="section-number-3">1.1.</span> Statistical Techniques</h3>
+<div id="outline-container-org5987176" class="outline-3">
+<h3 id="org5987176"><span class="section-number-3">1.1.</span> Statistical Techniques</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-org29dad72" class="outline-4">
-<h4 id="org29dad72"><span class="section-number-4">1.1.1.</span> Run Length Coding</h4>
+<div id="outline-container-org8ddba97" class="outline-4">
+<h4 id="org8ddba97"><span class="section-number-4">1.1.1.</span> Run Length Coding</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <ul class="org-ul">
 <li>good technique when compressing data that has frequent sequences of repeating characters</li>
@@ -98,8 +98,8 @@
 </div>
 </div>
 
-<div id="outline-container-org48874e5" class="outline-4">
-<h4 id="org48874e5"><span class="section-number-4">1.1.2.</span> Shannon Fano Coding</h4>
+<div id="outline-container-org7cb0432" class="outline-4">
+<h4 id="org7cb0432"><span class="section-number-4">1.1.2.</span> Shannon Fano Coding</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <ul class="org-ul">
 <li>uses probabilities of the characters in the string to assign codes to each character</li>
@@ -129,8 +129,8 @@
 </div>
 </div>
 
-<div id="outline-container-org841b10f" class="outline-4">
-<h4 id="org841b10f"><span class="section-number-4">1.1.3.</span> Huffman Coding</h4>
+<div id="outline-container-org466c61f" class="outline-4">
+<h4 id="org466c61f"><span class="section-number-4">1.1.3.</span> Huffman Coding</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <ul class="org-ul">
 <li>similar in principle to shannon-fano coding</li>
@@ -201,13 +201,13 @@
 </div>
 </div>
 
-<div id="outline-container-org2abf993" class="outline-4">
-<h4 id="org2abf993"><span class="section-number-4">1.1.4.</span> Arithmetic Coding</h4>
+<div id="outline-container-orgbb72869" class="outline-4">
+<h4 id="orgbb72869"><span class="section-number-4">1.1.4.</span> Arithmetic Coding</h4>
 </div>
 </div>
 
-<div id="outline-container-orgc6eb65b" class="outline-3">
-<h3 id="orgc6eb65b"><span class="section-number-3">1.2.</span> Burrows Wheeler Transform</h3>
+<div id="outline-container-org4f3297f" class="outline-3">
+<h3 id="org4f3297f"><span class="section-number-3">1.2.</span> Burrows Wheeler Transform</h3>
 <div class="outline-text-3" id="text-1-2">
 <ul class="org-ul">
 <li>completely different principle when compared to the other techniques described above</li>
@@ -463,7 +463,14 @@
 <li>move the character to the begining of the characterset</li>
 <li>repeat 'step 2' till all the characters are encoded</li>
 </ol></li>
-
+<li>why choose the last row?
+<ul class="org-ul">
+<li>consider an english sentence is to be encoded and it contains many occurances of the word 'has'</li>
+<li>in all the cyclic rotations of the sentence, many will start with the 'as' from the 'has' and end with the ' of the 'has'</li>
+<li>when sorted, all these rotations that start with the 'as' are brought together causing the last column to have a cluster of 'h's</li>
+<li>thus the last row contains clusters of letters which appear in a common pattern</li>
+<li>hence we choose the last row as the output of the encoder, it has good contextual clustering</li>
+</ul></li>
 <li><i><b>parameters</b></i> :
 <ul class="org-ul">
 <li><i>size of the block of text that we wish to operate on (user-settable)</i></li>
@@ -472,35 +479,101 @@
 </div>
 </div>
 
-<div id="outline-container-org36b665d" class="outline-3">
-<h3 id="org36b665d"><span class="section-number-3">1.3.</span> Dictionary Techniques</h3>
+<div id="outline-container-org83f53f2" class="outline-3">
+<h3 id="org83f53f2"><span class="section-number-3">1.3.</span> Dictionary Techniques</h3>
 <div class="outline-text-3" id="text-1-3">
-</div>
-<div id="outline-container-org62ac201" class="outline-4">
-<h4 id="org62ac201"><span class="section-number-4">1.3.1.</span> LZ77</h4>
-</div>
-
-<div id="outline-container-org9a9b25a" class="outline-4">
-<h4 id="org9a9b25a"><span class="section-number-4">1.3.2.</span> LZSS</h4>
-</div>
-
-<div id="outline-container-org29896ff" class="outline-4">
-<h4 id="org29896ff"><span class="section-number-4">1.3.3.</span> LZ78</h4>
+<p>
+The Lempel-Ziv algorithms are called dictionary algorithms because they all work in a similar way and require a "dictionary" to be formed while coding and decoding.
+The class of algorithms that come under the LZ77 family tree do not construct an explicit dictionary, but instead use the part of the string that has already been decoded/encoded as the dictionary.
+On the other hand, the LZ78 family of algorithms maintain a separate explicit dictionary while coding and encoding (the dictionary itself depends only on the part of the string already seen).
+These algorithms in general work on the principle that if a pattern has been seen before, it is probably easier to encode the references to the previous occurance for every re-occurance encounteresd.
+</p>
 </div>
 
-<div id="outline-container-orgcbd60b4" class="outline-4">
-<h4 id="orgcbd60b4"><span class="section-number-4">1.3.4.</span> LZW</h4>
+<div id="outline-container-org04e1012" class="outline-4">
+<h4 id="org04e1012"><span class="section-number-4">1.3.1.</span> LZ77</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<ul class="org-ul">
+<li>in the LZ77 algorithm, a cursor is maintain which tells the algorithm which character being processed at the time</li>
+<li>all the characters that fall to the left of the cursor (the number of characters to be considered depends on the size set) form the <i>search buffer</i></li>
+<li>the characters that fall on the right of the cursor form the <i>look ahead buffer</i></li>
+<li>the referenced emitted by the encoder are of the form &lt;o, l, c&gt;
+<ul class="org-ul">
+<li>o is the offset, how far back from the current cursor position the match was found, or 0 if no match was found</li>
+<li>l is the length of the longest match found, or 0 if no match was found</li>
+<li>c is the character to the immediate right of the match found, or the character itself if no match was found</li>
+</ul></li>
+<li>the process followed is as follows:
+<ol class="org-ol">
+<li>start at the beginning of the string</li>
+<li>look backwards <i>N</i> characters and look for the longest match</li>
+<li>if there is no match found emit (0, 0, c) where c is the character under the cursor</li>
+<li>else emit (o, l, c) according to the descriptions of o, c, l above</li>
+<li>repeat from 'step 2' for every character, skipping l characters if match of that length is found else move by 1</li>
+</ol></li>
+<li>using values of l larger than the dictionary size allows a run-length type encoding to be made
+<ul class="org-ul">
+<li>if the pattern length is more than search buffer size, copy the search buffer's characters from left to right and circle back to the start till we finish copying 'length' number of characters</li>
+</ul></li>
+<li>a bit of a problem with the aggressive coding scheme used is that if there are a lot of unmatched characters, instead of just encoding it as the character itself, the encoding is done as 3 numbers which is a waste of a lot of bits
+<ul class="org-ul">
+<li><i>the schemes that came after this try to fix this problem of over aggressively coding the source (eg: LZSS, snappy)</i></li>
+</ul></li>
+<li><i><b>parameters</b></i> :
+<ul class="org-ul">
+<li><i>the size of the search buffer (user-settable)</i>
+<ul class="org-ul">
+<li>the larger the search buffer
+<ul class="org-ul">
+<li>the longer back you can search</li>
+<li>the more bits you need to represent the offset</li>
+<li>but you can get references for things that you may not get references for if the search buffer is small</li>
+</ul></li>
+</ul></li>
+<li><i>maximum value for longest match (user-settable)</i>
+<ul class="org-ul">
+<li>if the longest match length is large we need more bits to represent its value in memory</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
 </div>
 
-<div id="outline-container-org32e396f" class="outline-4">
-<h4 id="org32e396f"><span class="section-number-4">1.3.5.</span> snappy</h4>
+<div id="outline-container-org6046e8a" class="outline-4">
+<h4 id="org6046e8a"><span class="section-number-4">1.3.2.</span> LZSS</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<ul class="org-ul">
+<li>the LZSS scheme tries and improves upon the LZ77 scheme</li>
+<li>to reduce the overhead caused by aggressive overhead of encoding unmatched single characters as &lt;o,l,c&gt; triplets,
+<ul class="org-ul">
+<li>if a match is found, emit a &lt;o,l&gt; pair for the offset and length of match</li>
+<li>otherwise, emit only the single unmatched character</li>
+</ul></li>
+<li>for the decoder to know whether the next unit is an &lt;o,l&gt; pair or a single character, a ONE BIT flag is used as a prefix - 1 for pairs and 0 for single characters</li>
+<li>this the encoded stream looks like 1(,) 0c 0c 1(,)</li>
+<li>this requires the capability of reading and writing single bits to files which may not be possible. In such cases, a FLAG byte may be used which encodes in its 8 bits the flags for the next 8 units</li>
+<li>the parameters for this algorithm are the same as those for the LZ77 algorithm</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgad2e7e0" class="outline-4">
+<h4 id="orgad2e7e0"><span class="section-number-4">1.3.3.</span> LZ78</h4>
+</div>
+
+<div id="outline-container-org73657c2" class="outline-4">
+<h4 id="org73657c2"><span class="section-number-4">1.3.4.</span> LZW</h4>
+</div>
+
+<div id="outline-container-org44b1866" class="outline-4">
+<h4 id="org44b1866"><span class="section-number-4">1.3.5.</span> snappy</h4>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Ashiwn Godbole</p>
-<p class="date">Created: 2022-07-09 Sat 16:52</p>
+<p class="date">Created: 2022-07-09 Sat 18:30</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

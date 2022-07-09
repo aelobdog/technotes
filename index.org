@@ -129,15 +129,57 @@
   2. take the character at the index recieved in the encoded string
   3. move the character to the begining of the characterset
   4. repeat 'step 2' till all the characters are encoded
-
+- why choose the last row?
+  - consider an english sentence is to be encoded and it contains many occurances of the word 'has'
+  - in all the cyclic rotations of the sentence, many will start with the 'as' from the 'has' and end with the ' of the 'has'
+  - when sorted, all these rotations that start with the 'as' are brought together causing the last column to have a cluster of 'h's
+  - thus the last row contains clusters of letters which appear in a common pattern
+  - hence we choose the last row as the output of the encoder, it has good contextual clustering
 - /*parameters*/ :
   - /size of the block of text that we wish to operate on (user-settable)/
 
 ** Dictionary Techniques
+The Lempel-Ziv algorithms are called dictionary algorithms because they all work in a similar way and require a "dictionary" to be formed while coding and decoding.
+The class of algorithms that come under the LZ77 family tree do not construct an explicit dictionary, but instead use the part of the string that has already been decoded/encoded as the dictionary.
+On the other hand, the LZ78 family of algorithms maintain a separate explicit dictionary while coding and encoding (the dictionary itself depends only on the part of the string already seen).
+These algorithms in general work on the principle that if a pattern has been seen before, it is probably easier to encode the references to the previous occurance for every re-occurance encounteresd.
 
 *** LZ77
+- in the LZ77 algorithm, a cursor is maintain which tells the algorithm which character being processed at the time
+- all the characters that fall to the left of the cursor (the number of characters to be considered depends on the size set) form the /search buffer/
+- the characters that fall on the right of the cursor form the /look ahead buffer/
+- the referenced emitted by the encoder are of the form <o, l, c>
+  - o is the offset, how far back from the current cursor position the match was found, or 0 if no match was found
+  - l is the length of the longest match found, or 0 if no match was found
+  - c is the character to the immediate right of the match found, or the character itself if no match was found
+- the process followed is as follows:
+  1. start at the beginning of the string
+  2. look backwards /N/ characters and look for the longest match
+  3. if there is no match found emit (0, 0, c) where c is the character under the cursor
+  4. else emit (o, l, c) according to the descriptions of o, c, l above
+  5. repeat from 'step 2' for every character, skipping l characters if match of that length is found else move by 1
+- using values of l larger than the dictionary size allows a run-length type encoding to be made
+  - if the pattern length is more than search buffer size, copy the search buffer's characters from left to right and circle back to the start till we finish copying 'length' number of characters
+- a bit of a problem with the aggressive coding scheme used is that if there are a lot of unmatched characters, instead of just encoding it as the character itself, the encoding is done as 3 numbers which is a waste of a lot of bits
+  - /the schemes that came after this try to fix this problem of over aggressively coding the source (eg: LZSS, snappy)/
+- /*parameters*/ :
+  - /the size of the search buffer (user-settable)/
+    - the larger the search buffer
+      - the longer back you can search
+      - the more bits you need to represent the offset
+      - but you can get references for things that you may not get references for if the search buffer is small
+  - /maximum value for longest match (user-settable)/
+    - if the longest match length is large we need more bits to represent its value in memory
 
 *** LZSS
+- the LZSS scheme tries and improves upon the LZ77 scheme
+- to reduce the overhead caused by aggressive overhead of encoding unmatched single characters as <o,l,c> triplets,
+  - if a match is found, emit a <o,l> pair for the offset and length of match
+  - otherwise, emit only the single unmatched character
+- for the decoder to know whether the next unit is an <o,l> pair or a single character, a ONE BIT flag is used as a prefix - 1 for pairs and 0 for single characters
+- this the encoded stream looks like 1(,) 0c 0c 1(,)
+- this requires the capability of reading and writing single bits to files which may not be possible. In such cases, a FLAG byte may be used which encodes in its 8 bits the flags for the next 8 units
+- the parameters for this algorithm are the same as those for the LZ77 algorithm
 
 *** LZ78
 
