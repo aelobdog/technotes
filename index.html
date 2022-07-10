@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-09 Sat 18:30 -->
+<!-- 2022-07-10 Sun 17:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Data Compression Techniques</title>
@@ -52,24 +52,25 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org7ca6806">1. Data Compression Techniques</a>
+<li><a href="#org9c970c2">1. Data Compression Techniques</a>
 <ul>
-<li><a href="#org5987176">1.1. Statistical Techniques</a>
+<li><a href="#orgcc72ad3">1.1. Statistical/Entropy Coding Techniques</a>
 <ul>
-<li><a href="#org8ddba97">1.1.1. Run Length Coding</a></li>
-<li><a href="#org7cb0432">1.1.2. Shannon Fano Coding</a></li>
-<li><a href="#org466c61f">1.1.3. Huffman Coding</a></li>
-<li><a href="#orgbb72869">1.1.4. Arithmetic Coding</a></li>
+<li><a href="#org2e0298f">1.1.1. Run Length Coding</a></li>
+<li><a href="#org7439b49">1.1.2. Shannon Fano Coding</a></li>
+<li><a href="#org9ceb48c">1.1.3. Huffman Coding</a></li>
+<li><a href="#orgef6992b">1.1.4. Arithmetic Coding</a></li>
 </ul>
 </li>
-<li><a href="#org4f3297f">1.2. Burrows Wheeler Transform</a></li>
-<li><a href="#org83f53f2">1.3. Dictionary Techniques</a>
+<li><a href="#orgeb82c59">1.2. Burrows Wheeler Transform</a></li>
+<li><a href="#orgc5bf41b">1.3. Dictionary Techniques</a>
 <ul>
-<li><a href="#org04e1012">1.3.1. LZ77</a></li>
-<li><a href="#org6046e8a">1.3.2. LZSS</a></li>
-<li><a href="#orgad2e7e0">1.3.3. LZ78</a></li>
-<li><a href="#org73657c2">1.3.4. LZW</a></li>
-<li><a href="#org44b1866">1.3.5. snappy</a></li>
+<li><a href="#orgb229edc">1.3.1. LZ77</a></li>
+<li><a href="#org654408c">1.3.2. LZ78</a></li>
+<li><a href="#org0c00bea">1.3.3. Some differences between LZ77 and LZ78 schemes</a></li>
+<li><a href="#org7bc808c">1.3.4. LZSS</a></li>
+<li><a href="#org904ec15">1.3.5. LZW</a></li>
+<li><a href="#org5b2a874">1.3.6. snappy</a></li>
 </ul>
 </li>
 </ul>
@@ -78,16 +79,21 @@
 </div>
 </div>
 
-<div id="outline-container-org7ca6806" class="outline-2">
-<h2 id="org7ca6806"><span class="section-number-2">1.</span> Data Compression Techniques</h2>
+<div id="outline-container-org9c970c2" class="outline-2">
+<h2 id="org9c970c2"><span class="section-number-2">1.</span> Data Compression Techniques</h2>
 <div class="outline-text-2" id="text-1">
+<p>
+Data compression techniques fall into different categories depending on the principle used to develop them.
+Most often a combination of different techniques is used to perform compression in real life, since some encoding schemes produce outputs that are not compressed so much, but that can be further compressed efficiently using other techniques.
+</p>
 </div>
-<div id="outline-container-org5987176" class="outline-3">
-<h3 id="org5987176"><span class="section-number-3">1.1.</span> Statistical Techniques</h3>
+
+<div id="outline-container-orgcc72ad3" class="outline-3">
+<h3 id="orgcc72ad3"><span class="section-number-3">1.1.</span> Statistical/Entropy Coding Techniques</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-org8ddba97" class="outline-4">
-<h4 id="org8ddba97"><span class="section-number-4">1.1.1.</span> Run Length Coding</h4>
+<div id="outline-container-org2e0298f" class="outline-4">
+<h4 id="org2e0298f"><span class="section-number-4">1.1.1.</span> Run Length Coding</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <ul class="org-ul">
 <li>good technique when compressing data that has frequent sequences of repeating characters</li>
@@ -98,8 +104,8 @@
 </div>
 </div>
 
-<div id="outline-container-org7cb0432" class="outline-4">
-<h4 id="org7cb0432"><span class="section-number-4">1.1.2.</span> Shannon Fano Coding</h4>
+<div id="outline-container-org7439b49" class="outline-4">
+<h4 id="org7439b49"><span class="section-number-4">1.1.2.</span> Shannon Fano Coding</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <ul class="org-ul">
 <li>uses probabilities of the characters in the string to assign codes to each character</li>
@@ -129,8 +135,8 @@
 </div>
 </div>
 
-<div id="outline-container-org466c61f" class="outline-4">
-<h4 id="org466c61f"><span class="section-number-4">1.1.3.</span> Huffman Coding</h4>
+<div id="outline-container-org9ceb48c" class="outline-4">
+<h4 id="org9ceb48c"><span class="section-number-4">1.1.3.</span> Huffman Coding</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <ul class="org-ul">
 <li>similar in principle to shannon-fano coding</li>
@@ -201,13 +207,48 @@
 </div>
 </div>
 
-<div id="outline-container-orgbb72869" class="outline-4">
-<h4 id="orgbb72869"><span class="section-number-4">1.1.4.</span> Arithmetic Coding</h4>
+<div id="outline-container-orgef6992b" class="outline-4">
+<h4 id="orgef6992b"><span class="section-number-4">1.1.4.</span> Arithmetic Coding</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<ul class="org-ul">
+<li>the other techniques mentioned till now all suffer from one common problem
+<ul class="org-ul">
+<li>they all require an integral number of bits per symbol</li>
+</ul></li>
+<li>arithmetic coding is a technique that tries to sidestep that problem by changing how strings are encoded</li>
+<li>this scheme tries to encode whole strings rather than encoding single elements</li>
+<li>this technique also requires knowledge of the probabilities of the different symbols in the string</li>
+<li>the procedure is as follows:
+<ol class="org-ol">
+<li>start with the interval [0.0, 1.0)</li>
+<li>divide the interval according to the probabilities of the characters in the character set</li>
+<li>read a character</li>
+<li>zoom into the range set by the character just read</li>
+<li>repeat 'step 3' till the end of stream character is encountered</li>
+<li>once done, choose a number in the region formed that requires the least amount of bits to represent</li>
+</ol></li>
+<li>this technique basically represents an entire block of the source text as a single floating point number, which can be used to obtain the source text by repeating the same zooming process till the end of stream symbol is encountered</li>
+<li>this ofcourse needs infinite precision numbers, which would require an inifinite precision mathematics, which is difficult to perform efficiently</li>
+<li>there are variations and techniques that allow for 16bit, 32bit precicion coding</li>
+<li>we need a solution to the "infinite precision in finite bits" problem</li>
+<li>since we do not have infinite bits to represent out fractions, we end up clipping long fraction that causes deviation from efficiency being the entropy
+<ul class="org-ul">
+<li>the error can be minimized so that we achieve as close to entropy efficiency as possible</li>
+</ul></li>
+<li>as the arithmetic coding process continues, the lower and upper bound of the range start to share their upper bits
+<ul class="org-ul">
+<li>this is a significant observation because it means that if the bounds share some bits, in the next step they will either share the same or more number of bits</li>
+<li>we can ignore these bits therefore, as once they match, they are inconsequential to further calculations</li>
+<li>this allows us to use "fixed point" representations for out bounds</li>
+<li>we simply move out the bits that match ensuring that we can keep going deeper and deeper into as small of ranges as we want</li>
+</ul></li>
+</ul>
+</div>
 </div>
 </div>
 
-<div id="outline-container-org4f3297f" class="outline-3">
-<h3 id="org4f3297f"><span class="section-number-3">1.2.</span> Burrows Wheeler Transform</h3>
+<div id="outline-container-orgeb82c59" class="outline-3">
+<h3 id="orgeb82c59"><span class="section-number-3">1.2.</span> Burrows Wheeler Transform</h3>
 <div class="outline-text-3" id="text-1-2">
 <ul class="org-ul">
 <li>completely different principle when compared to the other techniques described above</li>
@@ -479,8 +520,8 @@
 </div>
 </div>
 
-<div id="outline-container-org83f53f2" class="outline-3">
-<h3 id="org83f53f2"><span class="section-number-3">1.3.</span> Dictionary Techniques</h3>
+<div id="outline-container-orgc5bf41b" class="outline-3">
+<h3 id="orgc5bf41b"><span class="section-number-3">1.3.</span> Dictionary Techniques</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 The Lempel-Ziv algorithms are called dictionary algorithms because they all work in a similar way and require a "dictionary" to be formed while coding and decoding.
@@ -490,8 +531,8 @@ These algorithms in general work on the principle that if a pattern has been see
 </p>
 </div>
 
-<div id="outline-container-org04e1012" class="outline-4">
-<h4 id="org04e1012"><span class="section-number-4">1.3.1.</span> LZ77</h4>
+<div id="outline-container-orgb229edc" class="outline-4">
+<h4 id="orgb229edc"><span class="section-number-4">1.3.1.</span> LZ77</h4>
 <div class="outline-text-4" id="text-1-3-1">
 <ul class="org-ul">
 <li>in the LZ77 algorithm, a cursor is maintain which tells the algorithm which character being processed at the time</li>
@@ -539,41 +580,287 @@ These algorithms in general work on the principle that if a pattern has been see
 </div>
 </div>
 
-<div id="outline-container-org6046e8a" class="outline-4">
-<h4 id="org6046e8a"><span class="section-number-4">1.3.2.</span> LZSS</h4>
+<div id="outline-container-org654408c" class="outline-4">
+<h4 id="org654408c"><span class="section-number-4">1.3.2.</span> LZ78</h4>
 <div class="outline-text-4" id="text-1-3-2">
+<ul class="org-ul">
+<li>in the LZ78 algorithm too, a cursor is maintain which tells the algorithm which character being processed at the time</li>
+<li>in this algorithm, an explicit dictionary is maintained in memory as the encoding and decoding takes place</li>
+<li>the dictionary is maintained in the form of hashtables or tries</li>
+<li>the dictionary is filled as the cursor moves from the begginging of the source text to the end, using only the characters/patterns visited till that point
+<ul class="org-ul">
+<li>this property is important, because it allows the decoder to follow the exact same process as the encoder while decoding</li>
+<li>this property is also why in LZ78 there is no need to distribute the dictionary alongside the encoded text (in huffman coding, a large percentage of overhead is caused due to the fact that the dictionary/mappings need to be shared alongside the encoded string)</li>
+</ul></li>
+<li>in this technique the encoded stream is of the form &lt;i,c&gt;
+<ul class="org-ul">
+<li><i>i</i> is the index of the longest match found in the text to the right of the cursor in the dictionary</li>
+<li><i>c</i> is the character immediately following the longest pattern matched (in the text)</li>
+</ul></li>
+<li>the process of encoding a string is as follows
+<ol class="org-ol">
+<li>start from the first character in the source</li>
+<li>find the longest match from the source in the dictionary</li>
+<li>if no match is found, emit (0, c) where c is the character currently at the cursor</li>
+<li>if a match is found, and there is still some text left in the source after the matched text, emit (i, c) where i is the index in the dictionary to the longest match and c is the character in the text immediately following the matched string</li>
+<li>if the entire text from the cursor all the way till the end, emit (i,) where i is the index of the match in the dictionary</li>
+<li>increment the cursor by the length of the string matched</li>
+<li>repeat 'step 2' till all the input is exhausted</li>
+</ol></li>
+<li>the choice of data structure used to represent the dictionary will have an effect on the speed of finding matches</li>
+<li><i><b>parameters</b></i> :
+<ul class="org-ul">
+<li><i>dictionary size (user-settable)</i>
+<ul class="org-ul">
+<li>the main parameter of the LZ78 encoder is the size of the dictionary used</li>
+<li>this is an important parameter since we cannot allow an unbounded growth in dictionary size</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0c00bea" class="outline-4">
+<h4 id="org0c00bea"><span class="section-number-4">1.3.3.</span> Some differences between LZ77 and LZ78 schemes</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">LZ77</th>
+<th scope="col" class="org-left">LZ78</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">registers patterns from their second appearance</td>
+<td class="org-left">registers patters as and when they are first seen</td>
+</tr>
+
+<tr>
+<td class="org-left">for every pattern, there is a need to efficiently search the search buffer</td>
+<td class="org-left">for every pattern simply find its corresponding entry in the dictionary</td>
+</tr>
+
+<tr>
+<td class="org-left">high configurability (search buffer size, maximum length of match, search algorithm)</td>
+<td class="org-left">only configurability comes from the dictionary size</td>
+</tr>
+
+<tr>
+<td class="org-left">computation intensive</td>
+<td class="org-left">memory intensive</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+As CPUs get faster and memory gets cheaper, different ways to mix and match these basic schemes can help in obtaining optimum performance for the system in consideration.
+For example dictionary like hashtables are used in gzip to keep 3 character prefixes and the indices of their appearance in the string, even though it(deflate) is based on the LZSS scheme.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7bc808c" class="outline-4">
+<h4 id="org7bc808c"><span class="section-number-4">1.3.4.</span> LZSS</h4>
+<div class="outline-text-4" id="text-1-3-4">
 <ul class="org-ul">
 <li>the LZSS scheme tries and improves upon the LZ77 scheme</li>
 <li>to reduce the overhead caused by aggressive overhead of encoding unmatched single characters as &lt;o,l,c&gt; triplets,
 <ul class="org-ul">
 <li>if a match is found, emit a &lt;o,l&gt; pair for the offset and length of match</li>
+<li>if a match is found, but its length is less than 3, then just emit the single characters that form the match as that will take lesser memory to encode than encoding it as a reference</li>
 <li>otherwise, emit only the single unmatched character</li>
 </ul></li>
 <li>for the decoder to know whether the next unit is an &lt;o,l&gt; pair or a single character, a ONE BIT flag is used as a prefix - 1 for pairs and 0 for single characters</li>
 <li>this the encoded stream looks like 1(,) 0c 0c 1(,)</li>
-<li>this requires the capability of reading and writing single bits to files which may not be possible. In such cases, a FLAG byte may be used which encodes in its 8 bits the flags for the next 8 units</li>
+<li>this <i>requires the capability of reading and writing single bits</i> to files which may not be possible. In such cases, a <i>FLAG byte may be used which encodes in its 8 bits the flags for the next 8 units</i></li>
+<li>optimiaztions that can be made in the pattern searching algorithm
+<ul class="org-ul">
+<li>the deflate scheme that powers the gzip format uses an optimization where it uses a hashing scheme that uses the hashes of 3 character prefix sequences to keep track of matches</li>
+<li>it stores the index of the patterns occurance in the bucket pointed to by the hash of the first 3 characters of the sequence</li>
+<li>this makes searching for the pattern simpler as we need to just get the hash, linear search the bucket, and if found report the match index in the hashtable, else find the pattern at the locations mentioned in the hashtable where the 3 character sequence is seen and search the source from there</li>
+<li>This will be faster than just linear searching the search buffer everytime</li>
+</ul></li>
+<li><i><b>parameters</b></i>:
+<ul class="org-ul">
 <li>the parameters for this algorithm are the same as those for the LZ77 algorithm</li>
+</ul></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgad2e7e0" class="outline-4">
-<h4 id="orgad2e7e0"><span class="section-number-4">1.3.3.</span> LZ78</h4>
+<div id="outline-container-org904ec15" class="outline-4">
+<h4 id="org904ec15"><span class="section-number-4">1.3.5.</span> LZW</h4>
+<div class="outline-text-4" id="text-1-3-5">
+<ul class="org-ul">
+<li>the LZW scheme comes under the LZ78 family of schemes</li>
+<li>instead of storing backreferences using indices, it uses extra bits to make a larger set of symbols available and encodes patterns using these extra symbols</li>
+<li>instead of representing each symbol as an 8bit value (0-255), it represents each symbol as a 9bit value (0-511)</li>
+<li>the dictionary is simply like an array of 512 values, the first 256 of which are initialized with the values of their ascii counterparts</li>
+<li>the process of encoding is as follows:
+<ol class="org-ol">
+<li>initialize the first 256 entries of the dictionary/table with their ASCII values</li>
+<li>read a character</li>
+<li>add the character to the 'working string'</li>
+<li>if the working string is present in the dictionary/table
+<ul class="org-ul">
+<li><b>true?</b>
+<ul class="org-ul">
+<li>do nothing</li>
+</ul></li>
+<li><b>false?</b> <i>(working string is not present in the table)</i>
+<ul class="org-ul">
+<li>let S = substring of working string that excludes only the last character in the working string</li>
+<li>emit the symbol corresponding to S as the encoding</li>
+<li>add current working string to the table at the first unused entry</li>
+<li>set the working string as the last character of the working string</li>
+</ul></li>
+</ul></li>
+<li>repeat 'step 2' until all the text is encoded</li>
+</ol></li>
+<li>there is an interesting complication that arises when using this technique (called the cScSc case)
+<ul class="org-ul">
+<li>condition for the situation to occur:
+<ul class="org-ul">
+<li>encoder recieves a string of the form cScSc where c is a character, S is a string</li>
+<li>encoder has already in its dictionary/table the entry for cS</li>
+<li>encoder has not yet in its dictionary/table the entry for cSc</li>
+<li>when the encoder sees this pattern
+<ul class="org-ul">
+<li>sees cSc and emits the symbol corresponding to cS from table</li>
+<li>adds cSc to the dictionary</li>
+<li>sees second cSc (from the cSc <i>cSc</i>) and encodes it directly as the cSc entry</li>
+</ul></li>
+<li>an example of this is \(another\_banana\) which is encoded as \(another\_b(256)(265)\)
+<ul class="org-ul">
+<li>the 'cScSc' pattern here is 'anana' in 'banana'</li>
+<li>during decoding, when we reach the point of decoding 265, the table has no entry for it.</li>
+<li>here we solve the case by following the steps mentioned below</li>
+</ul></li>
+</ul></li>
+<li>the decoder may come across a symbol that is not yet present in its dictionary/table</li>
+<li>in this case, the next entry in the table is required to be guessed</li>
+<li>this can be done using the fact that the first character of the working string is going to be the first character in the decoded string</li>
+<li>this means that in case we need, we can use this assumption and append the first character of the working string to the working string itself to produce the next working string.
+<ul class="org-ul">
+<li>this can be repeated till we find the entry required, within the dictionary/table</li>
+</ul></li>
+</ul></li>
+<li><i><b>parameters</b></i>:
+<ul class="org-ul">
+<li>the number of bits used per symbol (generally 9bits)</li>
+</ul></li>
+<li>this technique requires bit reads and bit writes, which may not be available if the system can operate only on bytes
+<ul class="org-ul">
+<li>in this case we can examine the values of the 9bits used</li>
+<li>for the regular ASCII characters, we have values that fit in 8bits
+<ul class="org-ul">
+<li>this means their 9bit representations look like \(0 _ _ _ _ _ _ _ _\)</li>
+</ul></li>
+<li>for the extra 256 symbols that the 9bit representation offers
+<ul class="org-ul">
+<li>the representations look like \(1 _ _ _ _ _ _ _ _\)</li>
+</ul></li>
+<li>this means that we can treat the first bit as a FLAG <i>(0=regular ASCII 1=extended characterset)</i></li>
+<li>this allows systems that can operate only on bits to store the flags of the next 8 symbols in a FLAG BYTE</li>
+</ul></li>
+</ul>
+</div>
 </div>
 
-<div id="outline-container-org73657c2" class="outline-4">
-<h4 id="org73657c2"><span class="section-number-4">1.3.4.</span> LZW</h4>
+<div id="outline-container-org5b2a874" class="outline-4">
+<h4 id="org5b2a874"><span class="section-number-4">1.3.6.</span> snappy</h4>
+<div class="outline-text-4" id="text-1-3-6">
+<ul class="org-ul">
+<li>the snappy scheme belongs to the LZ77 family of schemes</li>
+<li>it is a byte oriented format (that is, everything is byte aligned, <i>unlike LZSS</i>)</li>
+<li>the file starts with an uncompressed length of file, in the form of a little endian <i>"varint"</i>
+<ul class="org-ul">
+<li>a <i>varint</i> is a series of bytes such that in each byte, the lower 7 bits represent some data and the upper bit is set only if there are more bits in the same logical unit ahead</li>
+<li>used by Google in its <a href="https://carlmastrangelo.com/blog/lets-make-a-varint">Protocol Buffer</a> format.</li>
+<li>to make a varint, we start off with the number we wish to encode, eg: 330</li>
+<li>the binary representation of 330 is 0000 0001 0100 1010</li>
+<li>we need to break it into bytes
+<ul class="org-ul">
+<li>0000 0001</li>
+<li>0100 1010</li>
+</ul></li>
+<li>now, in the lowermost bit, we need to set the uppermost bit to signal that the number is multi-byte</li>
+<li>so we get 0100 1010 -&gt; 0 1100 1010 (the 0 in the beginning is part of the original number and therefore must be preserved</li>
+<li>then we add the topmost bit (which came out as a single bit) to the first byte
+<ul class="org-ul">
+<li>0000 0001 0</li>
+</ul></li>
+<li>which then becomes 0000 0010</li>
+<li>so when we arrange the bits it now says 0000 0010 1100 1010</li>
+<li>hence the number 0x014a becomes the varint 0x02ca</li>
+<li>and then the order must be little endian so it becomes 0xca02</li>
+</ul></li>
+<li>the rest of the file is a stream of compressed data</li>
+<li>the compressed data contains 2 types of elements
+<ul class="org-ul">
+<li>literals (characters)</li>
+<li>back-references</li>
+</ul></li>
+<li>each element is composed of two parts
+<ul class="org-ul">
+<li>the tag byte
+<ul class="org-ul">
+<li>lower 2bits of the tag byte tell the type of data of the coming element</li>
+<li>00 for literals</li>
+<li>01 for references with 1byte long offset</li>
+<li>10 for references with 2byte long offset</li>
+<li>11 for references with 4byte long offset</li>
+</ul></li>
+<li>the data bytes</li>
+</ul></li>
+<li>Literals
+<ul class="org-ul">
+<li>tag byte has lower 2bits as 00</li>
+<li>the rest (upper 6bits) store the length (len-1) of literal sequence incoming</li>
+<li>if the 6bits are of values 60/61/62/63 then it indicates that the next 1/2/3/4 bytes encode the actual length</li>
+<li>the next len bits are uncompressed characters</li>
+</ul></li>
+<li>Back-references/Copies
+<ul class="org-ul">
+<li>tag bytes 01, 10, 11 code for offsets of varying byte sizes</li>
+<li>for 01
+<ul class="org-ul">
+<li>the upper 6bits of tag byte
+<ul class="org-ul">
+<li>lower three (bits 3,4,5) store the value of "length-4"</li>
+<li>upper three (bits 6,7,8) store the upper three bits of 11 bit "offset"</li>
+</ul></li>
+<li>the next byte stores the lower 8bits of the "offset"</li>
+</ul></li>
+<li>for 10
+<ul class="org-ul">
+<li>upper 6bits of the tag byte stores the "length-1" value</li>
+<li>next 2 bytes stores the little endian representation of the "offset"</li>
+</ul></li>
+<li>for 11
+<ul class="org-ul">
+<li>upper 6bits of the tag byte stores the "length-1" value</li>
+<li>next 4 bytes stores the little endian representation of the "offset"</li>
+</ul></li>
+</ul></li>
+<li>Unlike other compression formats like gzip, bzip2 snappy does not perform any kind of entropy coding</li>
+</ul>
 </div>
-
-<div id="outline-container-org44b1866" class="outline-4">
-<h4 id="org44b1866"><span class="section-number-4">1.3.5.</span> snappy</h4>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Ashiwn Godbole</p>
-<p class="date">Created: 2022-07-09 Sat 18:30</p>
+<p class="date">Created: 2022-07-10 Sun 17:02</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
