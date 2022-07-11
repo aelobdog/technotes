@@ -147,12 +147,12 @@ Most often a combination of different techniques is used to perform compression 
 - the move-to-front process is quite simple as well
   1. prepare the characterset
   2. start from the first character, get its index from the characterset
-  3. move the character to the begginging of the characterset
+  3. move the character to the beginning of the characterset
   4. repeat 'step 2' till all the characters are encoded
 - the procedure to decode this is also very simple
   1. prepare the characterset
   2. take the character at the index recieved in the encoded string
-  3. move the character to the begining of the characterset
+  3. move the character to the beginning of the characterset
   4. repeat 'step 2' till all the characters are encoded
 - why choose the last row?
   - consider an english sentence is to be encoded and it contains many occurances of the word 'has'
@@ -200,7 +200,7 @@ These algorithms in general work on the principle that if a pattern has been see
 - in the LZ78 algorithm too, a cursor is maintain which tells the algorithm which character being processed at the time
 - in this algorithm, an explicit dictionary is maintained in memory as the encoding and decoding takes place
 - the dictionary is maintained in the form of hashtables or tries
-- the dictionary is filled as the cursor moves from the begginging of the source text to the end, using only the characters/patterns visited till that point
+- the dictionary is filled as the cursor moves from the beginning of the source text to the end, using only the characters/patterns visited till that point
   - this property is important, because it allows the decoder to follow the exact same process as the encoder while decoding
   - this property is also why in LZ78 there is no need to distribute the dictionary alongside the encoded text (in huffman coding, a large percentage of overhead is caused due to the fact that the dictionary/mappings need to be shared alongside the encoded string)
 - in this technique the encoded stream is of the form <i,c>
