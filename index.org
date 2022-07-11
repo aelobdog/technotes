@@ -92,7 +92,7 @@ Most often a combination of different techniques is used to perform compression 
   4. zoom into the range set by the character just read
   5. repeat 'step 3' till the end of stream character is encountered
   6. once done, choose a number in the region formed that requires the least amount of bits to represent
-- this technique basically represents an entire block of the source text as a single floating point number, which can be used to obtain the source text by repeating the same zooming process till the end of stream symbol is encountered
+- this technique basically represents an entire block of the source text as a single real point number, which can be used to obtain the source text by repeating the same zooming process till the end of stream symbol is encountered
 - this ofcourse needs infinite precision numbers, which would require an inifinite precision mathematics, which is difficult to perform efficiently
 - there are variations and techniques that allow for 16bit, 32bit precicion coding
 - we need a solution to the "infinite precision in finite bits" problem
