@@ -113,13 +113,13 @@ Most often a combination of different techniques is used to perform compression 
   - the probability of occurance does not take into account the "order" or the "context" of occurance of the characters
   - BWT takes the order/context of occurance into account when encoding
 - the block-sorting process: (there are some optimizations that can be done, those are not shown for simplicity)
-  1. compute all the possible "left cyclic" permulations of the source string
-  2. sort the permulations in lexicographical order
-  3. extract the last column of the matrix formed by the sorted permulations
+  1. compute all the possible "left cyclic" permutations of the source string
+  2. sort the permutations in lexicographical order
+  3. extract the last column of the matrix formed by the sorted permutations
   4. extract the position of the original string in the sorted matrix
   5. the last column and the position are the output
 - example: source text = BANANA
-| permulations | Index | sorted | last column |
+| permutations | Index | sorted | last column |
 |--------------+-------+--------+-------------|
 | BANANA       |     1 | ABANAN | N           |
 | ANANAB       |     2 | ANABAN | N           |
