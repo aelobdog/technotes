@@ -1,0 +1,42 @@
+<title>Bzip2</title>
+<link rel="stylesheet" href="postbox.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<br>
+<h2>BZip2, the odd kid in my compression world</h2>
+<h3>Introduction</h3>
+Bzip2 is a fascinating algorithm. It is very different when compared to other
+compresseion techniques I've come across. I've been pretty invested in the
+Lempel-Ziv land of compression algorithms (yes, I'm going to use "algorithm"
+and "technique" interchangeably throughout the article) which is probably why
+bzip2 feels like a breath of fresh air to me right now.
+<br><br> 
+Now obviously, since the BWT is not a compression algorithm in the sense that
+it does not actually reduce the number of bytes requires to store data, it has
+to be used alongside other known algorithms like RLE, and Huffman compression.
+These techniques I am familiar with, because the beginning of my compression
+journey happened with these techniques. These techniques also appear in other
+techniques like gzip due to their simplicity and effectiveness.
+<br><br>
+Since I'm going to explore bzip2, its documentation and codebase, I might as
+well document what I learn. In the event that I forget what I have
+studied, this might come in handy. And who knows, maybe this article catches
+the eye of someone looking for something interesting and gets inspired by it?
+<br><br>
+Okay, okay. I'll stop rambling. Lets get on with it.
+<br>
+<h3>Some theory first</h3>
+I'll fill this in at some point not that far into the future.
+<br>
+<h3>Exploring the codebase</h3>
+It is quite easy to get lost in the code if one doesn't follow a strategy
+while doing so. That doesn't mean you won't get lost if you do follow a
+strategy but in this regard I'm a "something is better than nothing" kind
+of a guy.
+<br><br>
+My strategy is going to be simple. Follow the code path for compression of
+data from one flat buffer (array) to another. Following this, I will repeat
+the same for decompression. This seems to be a good place to start.
+<br>
+<h4>BZ_BuffToBuffCompress</h4>
+<br><br>
